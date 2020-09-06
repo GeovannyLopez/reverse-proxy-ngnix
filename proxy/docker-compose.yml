@@ -1,0 +1,25 @@
+version: '3'
+services:
+  proxy:
+    build: .
+    depends_on:
+      - static
+      - app
+    ports:
+      - "80:80"
+    restart: always
+  app:
+    build:
+      context: ../app
+      dockerfile: Dockerfile
+    environment: 
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+    - FLASK_APP=app.py
+    - FLASK_RUN_HOST=0.0.0.0
+  redis:
+    image: "redis:alpine"
+  static:
+    build:
+      context: ../static
+      dockerfile: Dockerfile
